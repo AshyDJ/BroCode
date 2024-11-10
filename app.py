@@ -5,7 +5,7 @@ import numpy as np
 from math import isnan
 app = Flask(__name__)
 # Applying CORS to all routes with specific origin
-CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/predict": {"origins": ["http://localhost:3000", "https://brocodestatic.onrender.com"]}})
 
 # Load your trained model (e.g., using pickle or joblib)
 with open('xgb_regressor_model.pkl', 'rb') as model_file1:
