@@ -17,8 +17,7 @@ with open('GBR.pkl', 'rb') as model_file2:
 with open('linear_regression_model.pkl', 'rb') as model_file3:
     lgr_model = pickle.load(model_file3)
 
-with open('random_forest.pkl', 'rb') as model_file4:
-    rf_model = pickle.load(model_file4)
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -56,11 +55,11 @@ def predict():
 
         prediction3 = lgr_model.predict(features)
         
-        prediction4 = rf_model.predict(features)
+
 
         def maxandmin():
             print('gello')
-            array=[prediction1[0],prediction2[0],prediction3[0],prediction4[0]]
+            array=[prediction1[0],prediction2[0],prediction3[0]]
             finalmax=max(array)
             finalmin=min(array)
 
