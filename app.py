@@ -8,8 +8,16 @@ app = Flask(__name__)
 CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}})
 
 # Load your trained model (e.g., using pickle or joblib)
-with open('xgb_regressor_model.pkl', 'rb') as model_file:
-    model = pickle.load(model_file)
+with open('xgb_regressor_model.pkl', 'rb') as model_file1:
+    xgb_model = pickle.load(model_file1)
+
+with open('GBR.pkl', 'rb') as model_file2:
+    gbr_model = pickle.load(model_file2)
+
+with open('linear_regression_model.pkl', 'rb') as model_file3:
+    lgr_model = pickle.load(model_file3)
+
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -41,10 +49,30 @@ def predict():
 
         # Reshape and predict with the model
         features = np.array(features).reshape(1, -1)
-        prediction = model.predict(features)
+        prediction1 = xgb_model.predict(features)
 
-        return jsonify({'prediction': float(prediction[0])})
+        prediction2 = gbr_model.predict(features)
 
+        prediction3 = lgr_model.predict(features)
+        
+
+
+        def maxandmin():
+            print('gello')
+            array=[prediction1[0],prediction2[0],prediction3[0]]
+            finalmax=max(array)
+            finalmin=min(array)
+
+            return finalmax,finalmin
+        
+
+        maximum,minimum=maxandmin()
+
+
+        return jsonify({
+            'prediction1': round(float(minimum), 2),
+            'prediction2': round(float(maximum), 2)
+        })
     except ValueError as e:
         return jsonify({'error': f"Invalid input data: {str(e)}"}), 400
     except Exception as e:
